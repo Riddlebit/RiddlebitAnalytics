@@ -8,13 +8,10 @@
   "CreatedBy": "Riddlebit Software",
   "CreatedByURL": "https://www.riddlebit.net/",
   "DocsURL": "https://www.riddlebit.net/",
-  "MarketplaceURL": "",
-  "SupportURL": "",
-  "EnabledByDefault": true,
-  "CanContainContent": false,
-  "IsBetaVersion": false,
-  "Installed": true,
-  "Modules": [ {
+  "EngineVersion": "4.24.0",
+ 
+  "Modules": [
+    {
       "Name": "RiddlebitAnalytics",
       "Type": "Runtime",
       "LoadingPhase": "PreDefault"

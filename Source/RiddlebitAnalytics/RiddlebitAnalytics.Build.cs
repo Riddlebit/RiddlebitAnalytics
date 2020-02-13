@@ -1,19 +1,22 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
-using UnrealBuildTool;
+using System.IO;
 
-public class RiddlebitAnalytics : ModuleRules
+namespace UnrealBuildTool.Rules
 {
-	public RiddlebitAnalytics(ReadOnlyTargetRules Target) : base(Target)
+	public class RiddlebitAnalytics : ModuleRules
 	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+		public RiddlebitAnalytics(ReadOnlyTargetRules Target) : base(Target)
+		{
+			PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicIncludePaths.AddRange(new string[] {});
-		PrivateIncludePaths.AddRange(new string[] {});
-		
-		PublicDependencyModuleNames.AddRange(new string[]{"Core", "Engine", "Http", "Json", "JsonUtilities" });
-		PrivateDependencyModuleNames.AddRange(new string[]{"CoreUObject", "Engine", "Slate", "SlateCore" });
-		
-		DynamicallyLoadedModuleNames.AddRange(new string[]{});
+			//PublicIncludePaths.AddRange(new string[] {});
+			PrivateIncludePaths.AddRange(new string[] { "RiddlebitAnalytics/Private" });
+
+			PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "Http", "Json" });
+			//PrivateDependencyModuleNames.AddRange(new string[]{"CoreUObject", "Engine", "Slate", "SlateCore" });
+
+			//DynamicallyLoadedModuleNames.AddRange(new string[]{});
+		}
 	}
 }
