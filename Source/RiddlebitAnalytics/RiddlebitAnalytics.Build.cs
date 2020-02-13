@@ -11,8 +11,8 @@ public class RiddlebitAnalytics : ModuleRules
 		PublicIncludePaths.AddRange(new string[] {});
 		PrivateIncludePaths.AddRange(new string[] {});
 		
-		PublicDependencyModuleNames.AddRange(new string[]{"Core"});
-		PrivateDependencyModuleNames.AddRange(new string[]{"CoreUObject", "Engine", "Slate", "SlateCore",});
+		PublicDependencyModuleNames.AddRange(new string[]{"Core", "Engine", "Http", "Json", "JsonUtilities" });
+		PrivateDependencyModuleNames.AddRange(new string[]{"CoreUObject", "Engine", "Slate", "SlateCore" });
 		
 		DynamicallyLoadedModuleNames.AddRange(new string[]{});
 	}
