@@ -1,0 +1,23 @@
+{
+  "FileVersion": 1,
+  "Version": 1,
+  "VersionName": "0.0.1",
+  "FriendlyName": "Riddlebit Analytics",
+  "Description": "Plugin for collecting UI and gameplay analytics and send them to a server.",
+  "Category": "Riddlebit Software",
+  "CreatedBy": "Riddlebit Software",
+  "CreatedByURL": "https://www.riddlebit.net/",
+  "DocsURL": "https://www.riddlebit.net/",
+  "MarketplaceURL": "",
+  "SupportURL": "",
+  "EnabledByDefault": true,
+  "CanContainContent": false,
+  "IsBetaVersion": false,
+  "Installed": true,
+  "Modules": [ {
+      "Name": "RiddlebitAnalytics",
+      "Type": "Runtime",
+      "LoadingPhase": "PreDefault"
+    }
+  ]
+}
