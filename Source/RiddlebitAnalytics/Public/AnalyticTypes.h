@@ -20,11 +20,11 @@ public:
     static FString GetApiUrl(EAnalyticTypeEnum Type) {
         switch(Type){
         case EAnalyticTypeEnum::ATE_Player:
-            return "/api/events/player";
+            return "api/events/player";
         case EAnalyticTypeEnum::ATE_Game:
-            return "/api/events/game";
+            return "api/events/game";
         case EAnalyticTypeEnum::ATE_UserInterface:
-            return "/api/events/ui";
+            return "api/events/ui";
         default:
             UE_LOG(LogTemp, Warning, TEXT("Invalid type in GetApiUrl: %i"), Type);
             return "";
