@@ -9,6 +9,7 @@ void UAnalyticsManager::InitAnalytics(FString Ip, FString Port)
 	Instance = NewObject<UAnalyticsManager>();
 	Instance->Ip = Ip;
 	Instance->Port = Port;
+	Instance->AddToRoot();
 }
 
 void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
@@ -18,7 +19,7 @@ void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
 
 void UAnalyticsManager::PushAnalytics()
 {
-	if (Http != NULL) {
+	if (Http != NULL) {	
 		if (Instance->Buffer.Num() > 0) {
 			TMap<EAnalyticTypeEnum, TArray<UAnalyticsData*>> DataTypeMap;
 			for (int i = 0; i < Instance->Buffer.Num(); ++i) {
@@ -33,6 +34,9 @@ void UAnalyticsManager::PushAnalytics()
 
 			for (auto& Elem : DataTypeMap) {
 				TSharedRef<IHttpRequest> Request = Http->CreateRequest();
+
+				Request->OnProcessRequestComplete().BindUObject(Instance, &UAnalyticsManager::ResponseCallback);
+				
 				FString Url = "http://" + Instance->Ip + ":" + Instance->Port + "/";
 				Url += UAnalyticTypes::GetApiUrl(Elem.Key);
 				Request->SetURL(Url);
@@ -52,6 +56,18 @@ void UAnalyticsManager::PushAnalytics()
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Please call InitAnalytics() before anything else."));
+	}
+}
+
+void UAnalyticsManager::ResponseCallback(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Hopsi"));
+	TSharedPtr<FJsonObject> JsonObject;
+	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
+
+	if (FJsonSerializer::Deserialize(Reader, JsonObject))
+	{
+
 	}
 }
 

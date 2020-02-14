@@ -30,10 +30,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
 	static void PushAnalytics();
 
+	void ResponseCallback(FHttpRequestPtr, FHttpResponsePtr, bool);
+
 	TArray<UAnalyticsData*> Buffer;
 
-	FString Ip;
-	FString Port;
+	FString Ip = "";
+	FString Port = "";
 
 private:
 	static FHttpModule* Http;
