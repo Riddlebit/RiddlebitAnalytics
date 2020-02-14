@@ -11,6 +11,7 @@
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 
+#include "AnalyticTypes.h"
 #include "AnalyticsManager.generated.h"
 
 UCLASS()
@@ -21,7 +22,7 @@ class RIDDLEBITANALYTICS_API UAnalyticsManager : public UObject
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
-	static void InitAnalytics();
+	static void InitAnalytics(FString Ip, FString Port);
 
 	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
 	static void RegisterAnalytics(UAnalyticsData* Data);
@@ -30,6 +31,9 @@ public:
 	static void PushAnalytics();
 
 	TArray<UAnalyticsData*> Buffer;
+
+	FString Ip;
+	FString Port;
 
 private:
 	static FHttpModule* Http;
@@ -44,7 +48,7 @@ class RIDDLEBITANALYTICS_API UAnalyticsData : public UObject
 public:
 
 	UFUNCTION(BlueprintPure, Category = "RiddlebitAnalytics")
-	static UAnalyticsData* MakeAnalyticsData();
+	static UAnalyticsData* MakeAnalyticsData(EAnalyticTypeEnum Type);
 	
 	UFUNCTION(BlueprintPure, Category = "RiddlebitAnalytics")
 	UAnalyticsData* AddField(FString Key, FString Data);
@@ -52,6 +56,7 @@ public:
 	FString ToJsonString();
 
 	UAnalyticsData();
+	EAnalyticTypeEnum Type;
 
 private:
 	FString TimeStamp;

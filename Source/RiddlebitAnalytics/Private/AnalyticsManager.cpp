@@ -3,10 +3,12 @@
 FHttpModule* UAnalyticsManager::Http = NULL;
 UAnalyticsManager* UAnalyticsManager::Instance = NULL;
 
-void UAnalyticsManager::InitAnalytics()
+void UAnalyticsManager::InitAnalytics(FString Ip, FString Port)
 {
 	Http = &FHttpModule::Get();
 	Instance = NewObject<UAnalyticsManager>();
+	Instance->Ip = Ip;
+	Instance->Port = Port;
 }
 
 void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
@@ -17,6 +19,7 @@ void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
 void UAnalyticsManager::PushAnalytics()
 {
 	if (Http != NULL && Instance->Buffer.Num() > 0) {
+		TArray<TArray<UAnalyticsData*>> SplitAnalyticsData;
 		TSharedRef<IHttpRequest> Request = Http->CreateRequest();
 		Request->SetURL("http://92.62.46.171:3000/api/ui-events");
 		Request->SetVerb("POST");
@@ -36,8 +39,10 @@ void UAnalyticsManager::PushAnalytics()
 	}
 }
 
-UAnalyticsData* UAnalyticsData::MakeAnalyticsData() {
-	return NewObject<UAnalyticsData>();
+UAnalyticsData* UAnalyticsData::MakeAnalyticsData(EAnalyticTypeEnum Type) {
+	UAnalyticsData* AnalyticsData = NewObject<UAnalyticsData>();
+	AnalyticsData->Type = Type;
+	return  AnalyticsData;
 }
 
 UAnalyticsData* UAnalyticsData::AddField(FString Key, FString Value)
