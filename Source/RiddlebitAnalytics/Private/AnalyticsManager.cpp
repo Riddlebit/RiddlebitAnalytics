@@ -18,35 +18,37 @@ void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
 
 void UAnalyticsManager::PushAnalytics()
 {
-	if (Http != NULL && Instance->Buffer.Num() > 0) {
-		TMap<EAnalyticTypeEnum, TArray<UAnalyticsData*>> DataTypeMap;
-		for (int i = 0; i < Instance->Buffer.Num(); ++i) {
-			if (DataTypeMap.Contains(Instance->Buffer[i]->Type)) {
-				DataTypeMap[Instance->Buffer[i]->Type].Add(Instance->Buffer[i]);
+	if (Http != NULL) {
+		if (Instance->Buffer.Num() > 0) {
+			TMap<EAnalyticTypeEnum, TArray<UAnalyticsData*>> DataTypeMap;
+			for (int i = 0; i < Instance->Buffer.Num(); ++i) {
+				if (DataTypeMap.Contains(Instance->Buffer[i]->Type)) {
+					DataTypeMap[Instance->Buffer[i]->Type].Add(Instance->Buffer[i]);
+				}
+				else {
+					DataTypeMap.Add(Instance->Buffer[i]->Type);
+					DataTypeMap[Instance->Buffer[i]->Type].Add(Instance->Buffer[i]);
+				}
 			}
-			else {
-				DataTypeMap.Add(Instance->Buffer[i]->Type);
-				DataTypeMap[Instance->Buffer[i]->Type].Add(Instance->Buffer[i]);
-			}
-		}
 
-		for (auto& Elem : DataTypeMap) {
-			TSharedRef<IHttpRequest> Request = Http->CreateRequest();
-			FString Url = "http://" + Instance->Ip + ":" + Instance->Port + "/";
-			Url += UAnalyticTypes::GetApiUrl(Elem.Key);
-			Request->SetURL(Url);
-			Request->SetVerb("POST");
-			Request->SetHeader(TEXT("User-Agent"), "X-UnrealEngine-Agent");
-			Request->SetHeader("Content-Type", TEXT("application/json"));
-			FString Content = "[ ";
-			for (int i = 0; i < Elem.Value.Num() - 1; ++i) {
-				Content += Elem.Value[i]->ToJsonString() + ", ";
+			for (auto& Elem : DataTypeMap) {
+				TSharedRef<IHttpRequest> Request = Http->CreateRequest();
+				FString Url = "http://" + Instance->Ip + ":" + Instance->Port + "/";
+				Url += UAnalyticTypes::GetApiUrl(Elem.Key);
+				Request->SetURL(Url);
+				Request->SetVerb("POST");
+				Request->SetHeader(TEXT("User-Agent"), "X-UnrealEngine-Agent");
+				Request->SetHeader("Content-Type", TEXT("application/json"));
+				FString Content = "[ ";
+				for (int i = 0; i < Elem.Value.Num() - 1; ++i) {
+					Content += Elem.Value[i]->ToJsonString() + ", ";
+				}
+				Content += Elem.Value[Elem.Value.Num() - 1]->ToJsonString() + " ]";
+				Request->SetContentAsString(Content);
+				Request->ProcessRequest();
 			}
-			Content += Elem.Value[Elem.Value.Num() - 1]->ToJsonString() + " ]";
-			Request->SetContentAsString(Content);
-			Request->ProcessRequest();
+			Instance->Buffer.Empty();
 		}
-		Instance->Buffer.Empty();
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Please call InitAnalytics() before anything else."));
