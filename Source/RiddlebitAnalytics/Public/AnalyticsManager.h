@@ -10,6 +10,7 @@
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
+#include "Containers/UnrealString.h" 
 
 #include "AnalyticTypes.h"
 #include "AnalyticsManager.generated.h"
@@ -32,8 +33,21 @@ public:
 
 	void ResponseCallback(FHttpRequestPtr, FHttpResponsePtr, bool);
 
+	void ResponseTestCallback(FHttpRequestPtr, FHttpResponsePtr, bool);
+	
+	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
+	static void GetShoots();
 	TArray<UAnalyticsData*> Buffer;
+	
+	TArray<FVector> Positions;
+	TArray<FVector> Rotations;
+	
+	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
+	static TArray<FVector> GetPositions();
 
+	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
+	static TArray<FVector> GetRotations();
+	
 	FString Ip = "";
 	FString Port = "";
 
@@ -54,6 +68,9 @@ public:
 	
 	UFUNCTION(BlueprintPure, Category = "RiddlebitAnalytics")
 	UAnalyticsData* AddField(FString Key, FString Data);
+
+	UFUNCTION(BlueprintPure, Category = "RiddlebitAnalytics")
+	UAnalyticsData* AddVectorField(FString Key, FVector Data);
 
 	FString ToJsonString();
 
