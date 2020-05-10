@@ -86,7 +86,6 @@ UAnalyticsData* UAnalyticsData::AddField(FString Key, FString Value)
 
 void UAnalyticsManager::ResponseTestCallback(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hopsi"));
 	TSharedPtr<FJsonObject> JsonObject;
 	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
 	
@@ -121,8 +120,7 @@ void UAnalyticsManager::GetShoots()
 {
 	TSharedRef<IHttpRequest> Request = Http->CreateRequest();
 	Request->OnProcessRequestComplete().BindUObject(Instance, &UAnalyticsManager::ResponseTestCallback);
-	//This is the url on which to process the request
-	Request->SetURL("http://92.62.46.171:3000/api/events/player");
+	Request->SetURL("https://" + Instance->Ip + ":" + Instance->Port + "/api/events/player");
 	Request->SetVerb("GET");
 	Request->SetHeader(TEXT("User-Agent"), "X-UnrealEngine-Agent");
 	Request->SetHeader("Content-Type", TEXT("application/json"));

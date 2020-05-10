@@ -2,15 +2,12 @@
 
 #include "CoreMinimal.h"
 
-//#include "Runtime/Online/HTTP/Public/Http.h"
 #include "Http.h"
-
-
-#include "Misc/DateTime.h" 
+#include "Misc/DateTime.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
-#include "Containers/UnrealString.h" 
+#include "Containers/UnrealString.h"
 
 #include "AnalyticTypes.h"
 #include "AnalyticsManager.generated.h"
