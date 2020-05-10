@@ -37,7 +37,7 @@ void UAnalyticsManager::PushAnalytics()
 
 				Request->OnProcessRequestComplete().BindUObject(Instance, &UAnalyticsManager::ResponseCallback);
 				
-				FString Url = "http://" + Instance->Ip + ":" + Instance->Port + "/";
+				FString Url = "https://" + Instance->Ip + ":" + Instance->Port + "/";
 				Url += UAnalyticTypes::GetApiUrl(Elem.Key);
 				Request->SetURL(Url);
 				Request->SetVerb("POST");
