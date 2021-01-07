@@ -33,7 +33,7 @@ void UAnalyticsManager::PushAnalytics()
 			}
 
 			for (auto& Elem : DataTypeMap) {
-				TSharedRef<IHttpRequest> Request = Http->CreateRequest();
+				TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = Http->CreateRequest();
 
 				Request->OnProcessRequestComplete().BindUObject(Instance, &UAnalyticsManager::ResponseCallback);
 				
@@ -118,7 +118,7 @@ void UAnalyticsManager::ResponseTestCallback(FHttpRequestPtr Request, FHttpRespo
 }
 void UAnalyticsManager::GetShoots()
 {
-	TSharedRef<IHttpRequest> Request = Http->CreateRequest();
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = Http->CreateRequest();
 	Request->OnProcessRequestComplete().BindUObject(Instance, &UAnalyticsManager::ResponseTestCallback);
 	Request->SetURL("https://" + Instance->Ip + ":" + Instance->Port + "/api/events/player");
 	Request->SetVerb("GET");
