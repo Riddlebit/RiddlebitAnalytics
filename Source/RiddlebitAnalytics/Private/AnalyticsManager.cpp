@@ -5,11 +5,13 @@ UAnalyticsManager* UAnalyticsManager::Instance = NULL;
 
 void UAnalyticsManager::InitAnalytics(FString Ip, FString Port)
 {
+	UE_LOG(LogTemp, Warning, TEXT("AnalMan Init A"));
 	Http = &FHttpModule::Get();
 	Instance = NewObject<UAnalyticsManager>();
 	Instance->Ip = Ip;
 	Instance->Port = Port;
 	Instance->AddToRoot();
+	UE_LOG(LogTemp, Warning, TEXT("AnalMan Init B"));
 }
 
 void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
@@ -37,7 +39,7 @@ void UAnalyticsManager::PushAnalytics()
 
 				Request->OnProcessRequestComplete().BindUObject(Instance, &UAnalyticsManager::ResponseCallback);
 				
-				FString Url = "https://" + Instance->Ip + ":" + Instance->Port + "/";
+				FString Url = "http://" + Instance->Ip + ":" + Instance->Port + "/";
 				Url += UAnalyticTypes::GetApiUrl(Elem.Key);
 				Request->SetURL(Url);
 				Request->SetVerb("POST");
