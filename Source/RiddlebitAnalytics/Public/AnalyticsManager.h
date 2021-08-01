@@ -12,7 +12,7 @@
 #include "AnalyticTypes.h"
 #include "AnalyticsManager.generated.h"
 
-UCLASS(config = Engine, defaultconfig)
+UCLASS()
 class RIDDLEBITANALYTICS_API UAnalyticsManager : public UObject
 {
 	GENERATED_BODY()
@@ -45,11 +45,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
 	static TArray<FVector> GetRotations();
 	
-	UPROPERTY(config)
 	FString Ip = "";
-
-	UPROPERTY(config)
 	FString Port = "";
+	bool bSecureHTTP = true;
 
 private:
 	static FHttpModule* Http;

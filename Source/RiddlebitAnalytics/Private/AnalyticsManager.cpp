@@ -5,13 +5,12 @@ UAnalyticsManager* UAnalyticsManager::Instance = NULL;
 
 void UAnalyticsManager::InitAnalytics(FString Ip, FString Port)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AnalMan Init A"));
 	Http = &FHttpModule::Get();
 	Instance = NewObject<UAnalyticsManager>();
 	Instance->Ip = Ip;
 	Instance->Port = Port;
-	Instance->AddToRoot();
-	UE_LOG(LogTemp, Warning, TEXT("AnalMan Init B"));
+	Instance->bSecureHTTP = false;
+	Instance->AddToRoot(); // To prevent the singleton from being garbage collected
 }
 
 void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
@@ -38,8 +37,8 @@ void UAnalyticsManager::PushAnalytics()
 				TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = Http->CreateRequest();
 
 				Request->OnProcessRequestComplete().BindUObject(Instance, &UAnalyticsManager::ResponseCallback);
-				
-				FString Url = "http://" + Instance->Ip + ":" + Instance->Port + "/";
+				FString Protocol = Instance->bSecureHTTP ? "https" : "http";
+				FString Url = Protocol + "://" + Instance->Ip + ":" + Instance->Port + "/";
 				Url += UAnalyticTypes::GetApiUrl(Elem.Key);
 				Request->SetURL(Url);
 				Request->SetVerb("POST");
