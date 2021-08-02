@@ -62,7 +62,6 @@ void UAnalyticsManager::PushAnalytics()
 
 void UAnalyticsManager::ResponseCallback(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hopsi"));
 	TSharedPtr<FJsonObject> JsonObject;
 	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
 
@@ -84,60 +83,6 @@ UAnalyticsData* UAnalyticsData::AddField(FString Key, FString Value)
 	Fields.Add(Key, Value);
 	return this;
 }
-
-void UAnalyticsManager::ResponseTestCallback(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
-{
-	TSharedPtr<FJsonObject> JsonObject;
-	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
-	
-	if (FJsonSerializer::Deserialize(Reader, JsonObject))
-	{
-		auto Arr = JsonObject->GetArrayField("playerEvents");
-		for (int i = 0; i < Arr.Num(); ++i) {
-			auto Obj = Arr[i]->AsObject();
-		
-			FString VecStr = Obj->GetStringField("position");
-			TArray<FString> ArrStr;
-			VecStr.ParseIntoArray(ArrStr, TEXT(","), true);
-			FVector Vec;
-			Vec.X = FCString::Atof(*ArrStr[0]);
-			Vec.Y = FCString::Atof(*ArrStr[1]);
-			Vec.Z = FCString::Atof(*ArrStr[2]);
-			Instance->Positions.Add(Vec);
-	
-		
-			FString RotVecStr = Obj->GetStringField("rotation");
-			TArray<FString> RotArrStr;
-			RotVecStr.ParseIntoArray(RotArrStr, TEXT(","), true);
-			FVector RotVec;
-			RotVec.X = FCString::Atof(*RotArrStr[0]);
-			RotVec.Y = FCString::Atof(*RotArrStr[1]);
-			RotVec.Z = FCString::Atof(*RotArrStr[2]);
-			Instance->Rotations.Add(RotVec);
-		}
-	}
-}
-void UAnalyticsManager::GetShoots()
-{
-	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = Http->CreateRequest();
-	Request->OnProcessRequestComplete().BindUObject(Instance, &UAnalyticsManager::ResponseTestCallback);
-	Request->SetURL("https://" + Instance->Ip + ":" + Instance->Port + "/api/events/player");
-	Request->SetVerb("GET");
-	Request->SetHeader(TEXT("User-Agent"), "X-UnrealEngine-Agent");
-	Request->SetHeader("Content-Type", TEXT("application/json"));
-	Request->ProcessRequest();
-}
-
-TArray<FVector> UAnalyticsManager::GetPositions()
-{
-	return Instance->Positions;
-}
-
-TArray<FVector> UAnalyticsManager::GetRotations()
-{
-	return Instance->Rotations;
-}
-
 
 UAnalyticsData* UAnalyticsData::AddVectorField(FString Key, FVector Data)
 {

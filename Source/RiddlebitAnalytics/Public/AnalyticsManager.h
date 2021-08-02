@@ -19,7 +19,6 @@ class RIDDLEBITANALYTICS_API UAnalyticsManager : public UObject
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
 	static void InitAnalytics(FString Ip, FString Port);
 
 	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
@@ -29,21 +28,8 @@ public:
 	static void PushAnalytics();
 
 	void ResponseCallback(FHttpRequestPtr, FHttpResponsePtr, bool);
-
-	void ResponseTestCallback(FHttpRequestPtr, FHttpResponsePtr, bool);
 	
-	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
-	static void GetShoots();
 	TArray<UAnalyticsData*> Buffer;
-	
-	TArray<FVector> Positions;
-	TArray<FVector> Rotations;
-	
-	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
-	static TArray<FVector> GetPositions();
-
-	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
-	static TArray<FVector> GetRotations();
 	
 	FString Ip = "";
 	FString Port = "";
