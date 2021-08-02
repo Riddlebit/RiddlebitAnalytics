@@ -10,6 +10,7 @@
 #include "Containers/UnrealString.h"
 
 #include "AnalyticTypes.h"
+#include "ValueTracker.h"
 #include "AnalyticsManager.generated.h"
 
 UCLASS()
@@ -25,11 +26,16 @@ public:
 	static void RegisterAnalytics(UAnalyticsData* Data);
 
 	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
+	static void RegisterFloatTracker(float& FloatPointer);
+
+	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
 	static void PushAnalytics();
 
 	void ResponseCallback(FHttpRequestPtr, FHttpResponsePtr, bool);
-	
+	void TestPrint();
+
 	TArray<UAnalyticsData*> Buffer;
+	TArray<UValueTracker*> Trackers;
 	
 	FString Ip = "";
 	FString Port = "";

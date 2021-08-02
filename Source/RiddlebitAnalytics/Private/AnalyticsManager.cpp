@@ -11,6 +11,26 @@ void UAnalyticsManager::InitAnalytics(FString Ip, FString Port)
 	Instance->Port = Port;
 	Instance->bSecureHTTP = false;
 	Instance->AddToRoot(); // To prevent the singleton from being garbage collected
+	
+	ULevel* Level = NULL;
+	UWorld* World = NULL;
+
+	//Instance->GetWorld()->OnLevelsChanged().AddUObject(Instance, &UAnalyticsManager::TestPrint);
+	//->BindUObject(Instance, &UAnalyticsManager::TestPrint);
+}
+
+void UAnalyticsManager::RegisterFloatTracker(float& FloatPointer)
+{
+	UValueTracker* Tracker = NewObject<UValueTracker>();
+	Tracker->AddToRoot(); // We will destroy this ourselves.
+	Tracker->Value = &FloatPointer;
+	Instance->Trackers.Add(Tracker);
+	Instance->GetWorld()->GetTimerManager().SetTimer(Tracker->TimerHandle, Tracker, &UValueTracker::PrintValue, 5.0f, true);
+}
+
+void UAnalyticsManager::TestPrint() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Delegate Test"));
 }
 
 void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
