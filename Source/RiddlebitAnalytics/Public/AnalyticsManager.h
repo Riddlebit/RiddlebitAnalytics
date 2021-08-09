@@ -7,6 +7,7 @@
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
+#include "Serialization/ObjectWriter.h" 
 #include "Containers/UnrealString.h"
 
 #include "AnalyticTypes.h"
@@ -26,10 +27,12 @@ public:
 	static void RegisterAnalytics(UAnalyticsData* Data);
 
 	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
-	static void RegisterFloatTracker(float& FloatPointer);
+	static void RegisterFloatTracker(UPARAM(ref) float& FloatPointer);
 
 	UFUNCTION(BlueprintCallable, Category = "RiddlebitAnalytics")
 	static void PushAnalytics();
+
+	static void SaveAllLocalData();
 
 	void ResponseCallback(FHttpRequestPtr, FHttpResponsePtr, bool);
 	void TestPrint();

@@ -19,7 +19,7 @@ void UAnalyticsManager::InitAnalytics(FString Ip, FString Port)
 	//->BindUObject(Instance, &UAnalyticsManager::TestPrint);
 }
 
-void UAnalyticsManager::RegisterFloatTracker(float& FloatPointer)
+void UAnalyticsManager::RegisterFloatTracker(UPARAM(ref) float& FloatPointer)
 {
 	UValueTracker* Tracker = NewObject<UValueTracker>();
 	Tracker->AddToRoot(); // We will destroy this ourselves.
@@ -31,6 +31,19 @@ void UAnalyticsManager::RegisterFloatTracker(float& FloatPointer)
 void UAnalyticsManager::TestPrint() 
 {
 	UE_LOG(LogTemp, Warning, TEXT("Delegate Test"));
+}
+
+void UAnalyticsManager::SaveAllLocalData()
+{
+	TArray<uint8> bytes;
+	FObjectWriter Ar = FObjectWriter(bytes);
+	UE_LOG(LogTemp, Warning, TEXT("A"));
+	for (int i = 0; i < Instance->Buffer.Num(); ++i) {
+		UE_LOG(LogTemp, Warning, TEXT("B"));
+		Instance->Buffer[i]->Serialize(Ar);
+		UE_LOG(LogTemp, Warning, TEXT("C"));
+	}
+	FFileHelper::SaveArrayToFile(bytes, *(FPaths::ConvertRelativePathToFull(FPaths::FPaths::ProjectDir()) + FString("/LocalAnalyticsTest.sav")));
 }
 
 void UAnalyticsManager::RegisterAnalytics(UAnalyticsData* Data)
